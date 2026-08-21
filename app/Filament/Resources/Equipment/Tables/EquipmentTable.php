@@ -186,6 +186,11 @@ HTML;
                 EditAction::make(),
             ])
             ->modifyQueryUsing(fn (Builder $query): Builder => $query->with('components'))
+            ->defaultSort(function (Builder $query, ?string $direction): Builder {
+                return $query->orderByRaw(
+                    '(select min(' . Equipment::nextDueExpression() . ') from service_tasks where service_tasks.equipment_id = equipment.id)'
+                );
+            })
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

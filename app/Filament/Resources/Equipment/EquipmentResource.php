@@ -18,7 +18,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class EquipmentResource extends Resource
 {
@@ -47,12 +46,6 @@ class EquipmentResource extends Resource
     public static function table(Table $table): Table
     {
         return EquipmentTable::configure($table);
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->orderByRaw('(select min(' . Equipment::nextDueExpression() . ') from service_tasks where service_tasks.equipment_id = equipment.id)');
     }
 
     public static function getRelations(): array
