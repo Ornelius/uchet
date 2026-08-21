@@ -125,6 +125,24 @@ class PagesTest extends TestCase
             ->assertSee('Котёл КВ-ГМ-10');
     }
 
+    public function test_equipment_list_renders_rows_for_components(): void
+    {
+        $this->equipment->components()->create([
+            'name' => 'Контроллер горелки',
+            'type' => 'Контроллер',
+            'serial_number' => 'CTRL-001',
+            'manufacturer' => 'Siemens',
+            'model' => 'LME22',
+        ]);
+
+        $this->get('/admin/equipment')
+            ->assertOk()
+            ->assertSee('Котёл КВ-ГМ-10')
+            ->assertSee('Контроллер горелки')
+            ->assertSee('CTRL-001')
+            ->assertSee('LME22');
+    }
+
     public function test_equipment_view_page_renders(): void
     {
         $this->get('/admin/equipment/'.$this->equipment->id)
